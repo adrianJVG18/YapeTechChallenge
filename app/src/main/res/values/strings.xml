@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">YapeTechnicalChallenge</string>
+    <string name="showing_the_recipe_s_origin_address">Showing the recipe\'s origin address</string>
+    <string name="recipe_icon">Recipe icon</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="recipe_item_icon_size">64dp</dimen>
+    <dimen name="margin_horizontal_x">16dp</dimen>
+    <dimen name="margin_vertical_x">16dp</dimen>
+    <dimen name="margin_vertical_m">8dp</dimen>
+
+    <dimen name="text_size_m">18sp</dimen>
+    <dimen name="text_size_xx">24sp</dimen>
+</resources>
