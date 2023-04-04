@@ -24,9 +24,7 @@ import javax.inject.Inject
 class FetchRecipesUsecase @Inject constructor(
     private val recipeRepository: RecipeRepository
 ) : FlowUsecase<Nothing, Response<List<RecipeDto>>>() {
-    override suspend fun execute(params: Nothing?):
-            Flow<Response<List<RecipeDto>>> = flow {
-
+    override suspend fun execute(params: Nothing?): Flow<Response<List<RecipeDto>>> = flow {
         recipeRepository.getRecipes().collect { response ->
             when (response) {
                 is Response.Success -> {

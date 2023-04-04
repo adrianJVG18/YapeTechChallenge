@@ -1,10 +1,11 @@
 package com.technical_challenge.yape.data.repository.recipe
 
-import com.technical_challenge.yape.data.retrofit.MockableRecipeRepositoryService
+import com.technical_challenge.yape.data.retrofit.MockableRecipeRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -18,6 +19,6 @@ object RecipeRepositoryProvider {
      */
     @Provides
     fun provideRecipeRepositoryImplementation(
-        recipeRepositoryImpl: MockableRecipeRepositoryService
+        recipeRepositoryImpl: MockableRecipeRepositoryImpl
     ) : RecipeRepository = recipeRepositoryImpl
 }
