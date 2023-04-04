@@ -5,4 +5,6 @@
 
     <string name="error_state_when_request_failed">error state when request failed</string>
     <string name="repositories_failed_to_fetch_text">Error al intentar obtener recetas, intenta de nuevo mas tarde</string>
+    <string name="recipe_imageview">Recipe imageview</string>
+    <string name="recipe_origin_location">Recipe Origin location</string>
 </resources>

@@ -12,6 +12,7 @@ import com.technical_challenge.yape.R
 import com.technical_challenge.yape.adapter.viewmodel.Output
 import com.technical_challenge.yape.adapter.viewmodel.RecipeViewmodel
 import com.technical_challenge.yape.databinding.FragmentHomeBinding
+import com.technical_challenge.yape.framework.adapter.RecipeItem
 import com.technical_challenge.yape.framework.adapter.RecipesAdapter
 import com.technical_challenge.yape.framework.utils.viewBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -40,11 +41,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             viewmodel.recipes.collect { state ->
                 when (state) {
                     is Output.Success -> {
-                        handleState(true)
-                        recipesAdapter = RecipesAdapter(state.data)
-                        binding.recipesListRv.adapter = recipesAdapter
+                        state.data.map {
+                            RecipeItem(it.id, it.name, it.imageUrl)
+                        }.also {
+                            handleState(true)
+                            binding.swipeRefresh.isRefreshing = false
+                            recipesAdapter = RecipesAdapter(it, itemClickListener)
+                            binding.recipesListRv.adapter = recipesAdapter
+                        }
+
                     }
                     is Output.Failure -> {
+                        binding.swipeRefresh.isRefreshing = false
                         handleState(false)
                     }
                     else -> {
@@ -61,8 +69,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
+    private val itemClickListener = object : RecipesAdapter.OnItemClickListener {
+        override fun onItemClick(item: RecipeItem) {
+            viewmodel.updateSelectedRecipe(item.id)
+            navController.navigate(
+                R.id.action_homeFragment_to_recipeDetailFragment
+            )
+        }
+
+    }
+
     private fun setupViews() {
-        binding.recipesListRv.layoutManager = LinearLayoutManager(requireContext())
+        with(binding) {
+            recipesListRv.layoutManager = LinearLayoutManager(requireContext())
+            swipeRefresh.setOnRefreshListener {
+                viewmodel.fetchRecipes()            }
+        }
     }
 
     private fun handleState(isSuccess: Boolean) {
