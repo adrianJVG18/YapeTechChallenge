@@ -2,4 +2,7 @@
     <string name="app_name">YapeTechnicalChallenge</string>
     <string name="showing_the_recipe_s_origin_address">Showing the recipe\'s origin address</string>
     <string name="recipe_icon">Recipe icon</string>
+
+    <string name="error_state_when_request_failed">error state when request failed</string>
+    <string name="repositories_failed_to_fetch_text">Error al intentar obtener recetas, intenta de nuevo mas tarde</string>
 </resources>
