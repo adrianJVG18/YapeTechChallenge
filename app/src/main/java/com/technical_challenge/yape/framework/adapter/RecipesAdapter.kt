@@ -5,14 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.technical_challenge.yape.databinding.ItemRecipeBinding
+import com.technical_challenge.yape.framework.model.RecipeItemUi
 
 class RecipesAdapter (
-    private val recipes: List<RecipeItem>,
+    private val recipes: List<RecipeItemUi>,
     private val onItemClickListener: OnItemClickListener
 ): RecyclerView.Adapter<RecipesAdapter.RecipeViewHolder>(){
 
     interface OnItemClickListener {
-        fun onItemClick(item: RecipeItem)
+        fun onItemClick(item: RecipeItemUi)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
@@ -29,7 +30,7 @@ class RecipesAdapter (
     inner class RecipeViewHolder(private val binding: ItemRecipeBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: RecipeItem, clickAction: RecipesAdapter.OnItemClickListener) {
+        fun bind(item: RecipeItemUi, clickAction: OnItemClickListener) {
             with(binding) {
                 itemTitleTextView.text = item.name
                 if (item.icon != null && item.icon.isNotBlank()) {

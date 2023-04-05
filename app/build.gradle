@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 
-    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    id ('com.google.android.libraries.mapsplatform.secrets-gradle-plugin')
     id("kotlin-android")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
@@ -58,6 +58,7 @@ dependencies {
 
     // Google maps
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
 
     // fragment
     implementation("androidx.fragment:fragment-ktx:1.5.5")

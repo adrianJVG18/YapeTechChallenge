@@ -11,6 +11,8 @@ import com.squareup.picasso.Picasso
 import com.technical_challenge.yape.R
 import com.technical_challenge.yape.adapter.viewmodel.RecipeViewmodel
 import com.technical_challenge.yape.databinding.FragmentRecipeDetailBinding
+import com.technical_challenge.yape.framework.model.LocationUi
+import com.technical_challenge.yape.framework.model.RecipeUi
 import com.technical_challenge.yape.framework.utils.viewBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -38,17 +40,24 @@ class RecipeDetailFragment : Fragment(R.layout.fragment_recipe_detail) {
                     .load(recipe.imageUrl)
                     .into(binding.recipeImageIv)
             }
-            val hasLocation = viewmodel.selectedRecipe?.originLocation?.isBlank() == false
-            if (hasLocation) {
+
+            if (viewmodel.hasLocation) {
                 showLocationButton.setOnClickListener {
-                    navController.navigate(
-                        R.id.action_recipeDetailFragment_to_mapFragment
-                    )
+                    goToMapFragment()
                 }
             } else {
                 showLocationButton.visibility = View.GONE
             }
         }
+    }
+
+    private fun goToMapFragment() {
+        navController.navigate(
+            R.id.action_recipeDetailFragment_to_mapFragment,
+            with(viewmodel.selectedRecipe!!) {
+                RecipeUi(name, LocationUi(originLocation!!.latitude, originLocation.longitude)).toBundle()
+            }
+        )
     }
 
 }

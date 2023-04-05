@@ -1,4 +1,4 @@
-package com.technical_challenge.yape.adapter.viewmodel
+package com.technical_challenge.yape.adapter.model
 
 sealed class Output<T> {
     data class Loading<T>(val isLoading: Boolean) : Output<T>()

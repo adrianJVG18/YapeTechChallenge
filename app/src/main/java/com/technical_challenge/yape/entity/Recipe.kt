@@ -16,5 +16,5 @@ data class Recipe(
     @SerializedName("image_url")
     val imageUrl: String?,
     @SerializedName("origin_location")
-    val originLocation: String?
+    val originLocation: Location?
 )

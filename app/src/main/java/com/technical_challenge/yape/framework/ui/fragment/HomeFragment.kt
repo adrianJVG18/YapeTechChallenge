@@ -9,14 +9,13 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.technical_challenge.yape.R
-import com.technical_challenge.yape.adapter.viewmodel.Output
+import com.technical_challenge.yape.adapter.model.Output
 import com.technical_challenge.yape.adapter.viewmodel.RecipeViewmodel
 import com.technical_challenge.yape.databinding.FragmentHomeBinding
-import com.technical_challenge.yape.framework.adapter.RecipeItem
+import com.technical_challenge.yape.framework.model.RecipeItemUi
 import com.technical_challenge.yape.framework.adapter.RecipesAdapter
 import com.technical_challenge.yape.framework.utils.viewBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 
 
 @ExperimentalCoroutinesApi
@@ -31,7 +30,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-        viewmodel.fetchRecipes()
         setupViews()
         observeData()
     }
@@ -41,15 +39,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             viewmodel.recipes.collect { state ->
                 when (state) {
                     is Output.Success -> {
-                        state.data.map {
-                            RecipeItem(it.id, it.name, it.imageUrl)
-                        }.also {
-                            handleState(true)
-                            binding.swipeRefresh.isRefreshing = false
-                            recipesAdapter = RecipesAdapter(it, itemClickListener)
-                            binding.recipesListRv.adapter = recipesAdapter
-                        }
-
+                        handleState(true)
+                        binding.swipeRefresh.isRefreshing = false
+                        recipesAdapter = RecipesAdapter(
+                            state.data.map { RecipeItemUi(it.id, it.name, it.imageUrl) },
+                            itemClickListener
+                        )
+                        binding.recipesListRv.adapter = recipesAdapter
                     }
                     is Output.Failure -> {
                         binding.swipeRefresh.isRefreshing = false
@@ -70,7 +66,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private val itemClickListener = object : RecipesAdapter.OnItemClickListener {
-        override fun onItemClick(item: RecipeItem) {
+        override fun onItemClick(item: RecipeItemUi) {
             viewmodel.updateSelectedRecipe(item.id)
             navController.navigate(
                 R.id.action_homeFragment_to_recipeDetailFragment
@@ -80,10 +76,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setupViews() {
+        if (viewmodel.recipes.value !is Output.Success) {
+            viewmodel.fetchRecipes()
+        }
         with(binding) {
             recipesListRv.layoutManager = LinearLayoutManager(requireContext())
             swipeRefresh.setOnRefreshListener {
-                viewmodel.fetchRecipes()            }
+                viewmodel.fetchRecipes()
+            }
         }
     }
 
