@@ -1,7 +1,10 @@
 package com.technical_challenge.yape.adapter.viewmodel
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.technical_challenge.yape.adapter.errors.EmptyResponseError
+import com.technical_challenge.yape.adapter.errors.ErrorMessages
 import com.technical_challenge.yape.adapter.model.LocationModel
 import com.technical_challenge.yape.adapter.model.Output
 import com.technical_challenge.yape.adapter.model.RecipeModel
@@ -38,9 +41,10 @@ class RecipeViewmodel @Inject constructor(
                 when (response) {
                     is Response.Success -> {
                         _recipes.emit(
-                            Output.Success(response.data.map { recipeDto ->
-                                convertToRecipeModel(recipeDto)
-                            })
+                            if (response.data.isEmpty())
+                                Output.Failure(EmptyResponseError(), ErrorMessages.EMPTY_RESPONSE)
+                            else
+                                Output.Success(response.data.map { convertToRecipeModel(it) })
                         )
                     }
                     is Response.Failure -> {
@@ -64,7 +68,8 @@ class RecipeViewmodel @Inject constructor(
         if (locationDto == null) null
         else LocationModel(locationDto.latitude, locationDto.longitude)
 
-    private fun convertToRecipeModel(recipeDto: RecipeDto): RecipeModel =
+    @VisibleForTesting
+    fun convertToRecipeModel(recipeDto: RecipeDto): RecipeModel =
         with(recipeDto) {
             RecipeModel(
                 id = id,

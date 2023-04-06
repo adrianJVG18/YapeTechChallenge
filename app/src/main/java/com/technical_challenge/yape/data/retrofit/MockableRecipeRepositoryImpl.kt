@@ -1,5 +1,6 @@
 package com.technical_challenge.yape.data.retrofit
 
+import androidx.annotation.VisibleForTesting
 import com.technical_challenge.yape.data.repository.Response
 import com.technical_challenge.yape.data.repository.recipe.LocationDto
 import com.technical_challenge.yape.data.repository.recipe.RecipeDto
@@ -38,7 +39,8 @@ class MockableRecipeRepositoryImpl @Inject constructor(
         emit(Response.Failure(Exception(it), "Failed to fetch Recipes"))
     }.flowOn(Dispatchers.IO)
 
-    private fun getLocation(location: Location?): LocationDto? {
+    @VisibleForTesting
+    fun getLocation(location: Location?): LocationDto? {
         return if (location == null || location.latitude.isNullOrBlank() || location.longitude.isNullOrBlank())
             null
         else
